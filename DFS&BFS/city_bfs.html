@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>广度优先</title>
+</head>
+
+<body>
+    <select id="province"></select>
+    <select id="city"></select>
+    <select id="county"></select>
+    <script type="text/javascript" src="source/js/cities.js"></script>
+    <script type="text/javascript" src="source/js/BFS.js"></script>
+    <script type="text/javascript">
+    (function(home) {
+        const province = document.getElementById('province');
+        const city = document.getElementById('city');
+        const county = document.getElementById('county');
+        const source = home.child;
+
+        /**
+         * 初始化省份
+         */
+        const provinceSourceInit = function() {
+            let html = '';
+            home.child.forEach(item => {
+                html += `<option value="${item.name}">${item.name}</option>`
+            })
+            province.innerHTML = html;
+        }
+
+        /**
+         * 按目标城市名进行广度搜索，并将搜索结果插入到指定节点。
+         * @param {string} location 目标城市名
+         * @param {string} element  指定节点的 ID
+         */
+        const BFSfindCity = function(location, element) {
+            let html = '';
+            findPathBFS(source, location).child.forEach(item => {
+                html += `<option value="${item.name}">${item.name}</option>`
+            });
+            document.getElementById(element).innerHTML = html;
+        }
+
+        /**
+         * 事件绑定
+         */
+        const eventBindChange = function() {
+            province.addEventListener('change',function(e) {
+                BFSfindCity(e.target.value, 'city');
+            },false)
+
+            city.addEventListener('change', function(e) {
+                BFSfindCity(e.target.value, 'county');
+            },false)
+        }
+
+        const init = function() {
+            provinceSourceInit();
+            eventBindChange();
+        }
+
+        init();
+
+    })(home)
+    </script>
+</body>
+
+</html>
